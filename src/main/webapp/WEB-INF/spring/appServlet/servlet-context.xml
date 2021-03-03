@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<annotation-driven />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<resources mapping="/resources/**" location="/resources/" />
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+	
+	 <!-- json 컨버터 등록 -->
+   <beans:bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+	<beans:property name="messageConverters">
+		<beans:list value-type="java.util.ArrayList">
+			<beans:ref bean="mappingJackson2HttpMessageConverter"/>
+		</beans:list>
+	</beans:property>   
+   </beans:bean>
+   
+    <beans:bean id="mappingJackson2HttpMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+      <beans:property name = "supportedMediaTypes">
+         <!-- 개발자가 원하는 각종 타입들을 여러개 명시할 수 있다 -->
+         <beans:list>
+            <beans:value>application/json;charset=UTF-8</beans:value>
+         </beans:list>
+      </beans:property>
+   </beans:bean>
+   
+   <!-- 멀티파일 -->
+   <beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+	
+	<!-- 컴포넌트 스캔  -->
+	<context:component-scan base-package="com.viniv.pourah.controller" />
+	
+	<!-- aop빈 등록 -->
+	<beans:bean id="adminLoginCheck" class="com.viniv.pourah.admin.aop.AdminLoginCheck"/>
+	<beans:bean id="memberLoginCheck" class="com.viniv.pourah.admin.aop.MemberLoginCheck"/>
+	<beans:bean id="adminLoginExceptionHandler" class="com.viniv.pourah.admin.aop.AdminLoginExceptionHandler"/>
+	<beans:bean id="memberLoginExceptionHander" class="com.viniv.pourah.admin.aop.MemberLoginExceptionHander"/>
+	<beans:bean id="globalAdminListGetter" class="com.viniv.pourah.admin.aop.GlobalAdminListGetter"></beans:bean>
+		
+	<aop:config>
+		<aop:aspect id="checkAdminLogging" ref="adminLoginCheck">
+			<aop:pointcut expression="execution(public * com.viniv.pourah.controller.admin..*(..)) and !@annotation(com.viniv.pourah.model.annotation.NoLogging)" id="adminLoginPointcut"/>
+			<aop:around method="adminLoggingCheck" pointcut-ref="adminLoginPointcut"/>
+		</aop:aspect>
+		<aop:aspect id="checkGloalAdminList" ref="globalAdminListGetter">
+			<aop:pointcut expression="execution(public * com.viniv.pourah.controller.admin..*(..)) and !@annotation(com.viniv.pourah.model.annotation.NoAdminList) and !@annotation(com.viniv.pourah.model.annotation.NoLogging)" id="adminListRequirePointCut"/>
+			<aop:around method="globalAdminList" pointcut-ref="adminListRequirePointCut"/>
+		</aop:aspect>
+		<aop:aspect id="checkMemberLoggin" ref="memberLoginCheck">
+			<aop:pointcut expression="execution(public * com.viniv.pourah.controller.liquor.member..*(..))
+			and !@annotation(com.viniv.pourah.model.annotation.NoLogging) 
+			|| execution(public * com.viniv.pourah.controller.liquor.pay..*(..))
+			and !@annotation(com.viniv.pourah.model.annotation.NoLogging)" id="memberLoginPointcut"/>
+			<aop:around method="memberLoggingCheck" pointcut-ref="memberLoginPointcut"/>
+		</aop:aspect>
+	</aop:config>
+	
+</beans:beans>

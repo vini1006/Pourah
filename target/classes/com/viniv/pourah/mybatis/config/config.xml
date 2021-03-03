@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.viniv.pourah.model.domain.Atopcategory" alias="Atopcategory"/>
+		<typeAlias type="com.viniv.pourah.model.domain.Asubcategory" alias="Asubcategory"/>
+		<typeAlias type="com.viniv.pourah.model.domain.Product" alias="Product"/>
+		<typeAlias type="com.viniv.pourah.model.domain.PImage" alias="PImage"/>
+		<typeAlias type="com.viniv.pourah.model.domain.Admin" alias="Admin"/>
+		<typeAlias type="com.viniv.pourah.model.domain.Member" alias="Member"/>
+		<typeAlias type="com.viniv.pourah.model.domain.Receiver" alias="Receiver"/>
+		<typeAlias type="com.viniv.pourah.model.domain.Cart" alias="Cart"/>
+		<typeAlias type="com.viniv.pourah.model.domain.Order_state" alias="Order_state"/>
+		<typeAlias type="com.viniv.pourah.model.domain.Paymethod" alias="Paymethod"/>
+		<typeAlias type="com.viniv.pourah.model.domain.Order_summary" alias="Order_summary"/>
+		<typeAlias type="com.viniv.pourah.model.domain.Order_detail" alias="Order_detail"/>
+		<typeAlias type="com.viniv.pourah.model.domain.Review" alias="Review"/>
+		<typeAlias type="com.viniv.pourah.model.domain.News" alias="News"/>
+	</typeAliases>
+	
+	<mappers>
+		<mapper resource="com/viniv/pourah/mybatis/mapper/AtopcategoryMapper.xml"/>	
+		<mapper resource="com/viniv/pourah/mybatis/mapper/AsubcategoryMapper.xml"/>	
+		<mapper resource="com/viniv/pourah/mybatis/mapper/ProductMapper.xml"/>	
+		<mapper resource="com/viniv/pourah/mybatis/mapper/PImageMapper.xml"/>	
+		<mapper resource="com/viniv/pourah/mybatis/mapper/AdminMapper.xml"/>	
+		<mapper resource="com/viniv/pourah/mybatis/mapper/MemberMapper.xml"/>	
+		<mapper resource="com/viniv/pourah/mybatis/mapper/ReceiverMapper.xml"/>	
+		<mapper resource="com/viniv/pourah/mybatis/mapper/CartMapper.xml"/>	
+		<mapper resource="com/viniv/pourah/mybatis/mapper/Order_stateMapper.xml"/>	
+		<mapper resource="com/viniv/pourah/mybatis/mapper/PaymethodMapper.xml"/>	
+		<mapper resource="com/viniv/pourah/mybatis/mapper/Order_summaryMapper.xml"/>	
+		<mapper resource="com/viniv/pourah/mybatis/mapper/Order_detailMapper.xml"/>	
+		<mapper resource="com/viniv/pourah/mybatis/mapper/ReviewMapper.xml"/>	
+		<mapper resource="com/viniv/pourah/mybatis/mapper/NewsMapper.xml"/>	
+	</mappers>
+	
+</configuration>

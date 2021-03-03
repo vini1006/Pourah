@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Order_state">
+	
+	<select id="selectAll" resultType="Order_state">
+		select * from order_state
+	</select>	
+	
+	<select id="selectById" parameterType="int" resultType="Order_state">
+		select * from order_state where order_state_id = #{order_state_id}
+	</select>
+	
+	
+</mapper>

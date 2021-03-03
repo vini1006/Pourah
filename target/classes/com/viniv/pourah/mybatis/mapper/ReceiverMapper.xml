@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Receiver">
+	
+	<select id="selectAllByMemberId" parameterType="int" resultType="Receiver">
+		select * from receiver where member_id = #{member_id};
+	</select>
+	
+	<select id="selectById" parameterType="int" resultType="Receiver">
+		select * from receiver where receiver_id = #{receiver_id}
+	</select>
+	
+	<insert id="insert" parameterType="Receiver">
+		insert into receiver(member_id, r_name, r_phone, zipcode, addr1, addr2, receiver_name)
+		values(#{member_id}, #{r_name}, #{r_phone}, #{zipcode}, #{addr1}, #{addr2}, #{receiver_name})
+	</insert>
+	
+	<delete id="deleteByMemberId" parameterType="int">
+		delete from receiver where member_id = #{member_id}
+	</delete>
+	
+	<delete id="deleteById">
+		delete from receiver where receiver_id = #{receiver_id}
+	</delete>
+	
+	
+</mapper>

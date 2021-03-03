@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Admin">
+
+	<insert id="insert" parameterType="Admin">
+		insert into admin(user_id, user_passwd, phone, email_id, email_addr, user_name)
+		values(#{user_id}, #{user_passwd}, #{phone}, #{email_id}, #{email_addr}, #{user_name})
+	</insert>
+
+	<select id="select" parameterType="Admin" resultType="Admin">
+		select * from admin where user_id=#{user_id} and user_passwd=#{user_passwd}
+	</select>
+	
+	<select id="selectByUserId" parameterType="String" resultType="Admin">
+		select * from admin where user_id=#{user_id}
+	</select>
+	
+	<select id="selectAll" resultType="Admin">
+		select * from admin	
+	</select>
+	
+	<update id="update">
+		update admin set user_id=#{user_id}
+		<if test='user_passwd != null '>
+		, user_passwd = #{user_passwd}
+		</if>
+		, phone = #{phone}
+		, email_id = #{email_id}
+		, email_addr = #{email_addr}
+		, user_name = #{user_name}
+		where admin_id = #{admin_id}
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		delete from admin where admin_id = #{admin_id}
+	</delete>
+	
+	
+	
+</mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Cart">
+
+
+	<insert id="insert" parameterType="Cart">
+		insert into cart(product_id, member_id, quantity) 
+		values(#{product.product_id}, #{member_id}, #{quantity})	
+	</insert>
+	
+	<resultMap type="Cart" id="CartProductJoin">
+		<id column="cart_id" property="cart_id"/>
+		<result column="member_id" property="member_id"/>
+		<result column="quantity" property="quantity"/>
+		<association 
+		column="product_id"
+		property="product"
+		javaType="Product"
+		select="Product.selectById"/>
+	</resultMap>
+	
+
+	
+	<select id="selectByMemberId" parameterType="int" resultMap="CartProductJoin">
+		select * from cart where member_id = #{member_id} 
+	</select>
+	
+	<select id="selectByProductId" parameterType="int" resultMap="CartProductJoin">
+		select * from cart where product_id = #{product_id}
+	</select>
+	
+	<select id="selectById" parameterType="int" resultMap="CartProductJoin">
+		select * from cart where cart_id = #{cart_id}
+	</select>
+	
+	<update id="updatePlus" parameterType="int">
+		update cart set quantity = quantity+1 where cart_id = #{cart_id}
+	</update>
+	
+	<update id="updateMinus">
+		update cart set quantity = quantity-1 where cart_id = #{cart_id}
+	</update>
+	
+	<delete id="deleteByCartId">
+		delete from cart where cart_id = #{cart_id};
+	</delete>
+	
+	<delete id="deleteByMemberId" parameterType="int">
+		delete from cart where member_id = #{member_id}
+	</delete>
+	
+	
+</mapper>

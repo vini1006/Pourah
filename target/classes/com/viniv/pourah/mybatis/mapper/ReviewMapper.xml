@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Review">
+
+	<insert id="insert" parameterType="Review">
+		insert into review(product_id, member_id, detail, score, origin_id)
+		values(#{product_id},#{member_id},#{detail},#{score}, #{origin_id})
+		<selectKey keyProperty="review_id" resultType="int" order="AFTER">
+			select last_insert_id() as review_id
+		</selectKey>
+	</insert>
+	
+	<update id="updateOrigin" parameterType="int">
+		update review set origin_id = #{origin_id} where review_id = #{origin_id}
+	</update>
+	
+	<update id="updateRank" parameterType="Review">
+		update review set rank=(select max(rank)+1 from review where origin_id = #{origin_id}) where review_id = #{review_id}
+	
+	</update>
+	
+	<resultMap type="Review" id="reviewMemberJoin">
+		<id column="review_id" property="review_id"/>
+		<result column="product_id" property="product_id"/>
+		<result column="detail" property="detail"/>
+		<result column="score" property="score"/>
+		<result column="regdate" property="regdate"/>
+		<result column="rank" property="rank"/>
+		<association
+		column="member_id" 
+		property="member"
+		javaType="Member"
+		select="Member.selectById"
+		/>
+	</resultMap>
+	
+	<select id="selectAll" resultMap="reviewMemberJoin">
+		select * from review order by review_id desc
+	</select>
+	
+	<select id="selectByProductId" parameterType="int" resultMap="reviewMemberJoin">
+		select * from review where product_id = #{product id} and review_id <![CDATA[ = ]]> origin_id order by review_id desc
+	</select>
+	
+	<select id="selectReplyByProductId" parameterType="Review" resultMap="reviewMemberJoin">
+		select * from review where product_id = #{product_id} and origin_id = #{origin_id} and rank > 0 order by rank asc  	
+	</select>
+	
+</mapper>

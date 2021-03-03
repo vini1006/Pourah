@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Order_detail">
+
+	<insert id="insert" parameterType="Order_detail">
+		insert into order_detail(order_summary_id, product_id, ori_price, quantity)
+		values(#{order_summary_id}, #{product_id}, #{ori_price}, #{quantity})
+		 <selectKey order="AFTER" keyProperty="order_summary_id" resultType="int">
+			select last_insert_id() as order_detail_id
+		</selectKey> 
+	</insert>
+	
+	<resultMap type="Order_detail" id="OrderDetailProductOrderStateJoin">
+		<id column="order_detail_id" property="order_detail_id"/>
+		<result column="order_summary_id" property="order_summary_id"/>
+		<result column="order_state_id" property="order_state_id"/>
+		<result column="ori_price" property="ori_price"/>
+		<result column="quantity" property="quantity"/> 
+		<association 
+		column="product_id"
+		property="product"
+		javaType="Product"
+		select="Product.selectById"/>
+		<association
+		column="order_state_id" 
+		property="order_state"
+		javaType="Order_state"
+		select="Order_state.selectById"
+		/>
+	</resultMap>
+	
+	<select id="selectByOrder_summaryId" parameterType="int" resultMap="OrderDetailProductOrderStateJoin">
+		select * from order_detail where order_summary_id = #{order_summary_id}
+	</select>
+	
+</mapper>

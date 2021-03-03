@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Atopcategory">
+	
+	<insert id="insertMaxRank" parameterType="Asubcategory">
+		<selectKey resultType="int" keyProperty="rank" order="BEFORE">
+			select max(rank)+1 from a_topcategory
+		</selectKey>
+		insert into a_topcategory(name, rank) values(#{name}, #{rank}) 
+	</insert>
+
+	<select id="selectById" parameterType="int" resultType="Atopcategory">
+		select * from a_topcategory where a_topcategory_id = #{a_topcategory_id}
+	</select>
+	
+	
+	<resultMap type="Atopcategory" id="AtopAsubJoin">
+		<id column="a_topcategory_id" property="a_topcategory_id"/>
+		<result column="name" property="name"/>
+		<result column="rank" property="rank"/>
+		<collection column="a_topcategory_id"
+		 property="a_subcategory"
+		 javaType="java.util.List"
+		 ofType="Asubcategory"
+		 select="Asubcategory.selectByAtopId"
+		 />
+	</resultMap>
+	
+	<select id="selectEverything" resultMap="AtopAsubJoin">
+		select * from a_topcategory order by rank asc
+	</select>
+	
+	<select id="selectAll" resultMap="AtopAsubJoin">
+		select * from a_topcategory order by rank asc
+	</select>
+</mapper>

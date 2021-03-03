@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Asubcategory">
+
+	<resultMap type="Asubcategory" id="AsubProductJoin">
+		<id column="a_subcategory_id" property="a_subcategory_id"/>
+		<result column="a_topcategory_id" property="a_topcategory_id"/>
+		<result column="name" property="name"/>
+		<result column="rank" property="rank"/>
+		<collection 
+			column="a_subcategory_id"
+			property="productList"
+			javaType="java.util.List"
+		 	ofType="Product"
+		 	select="Product.selectByASubId"/>
+	</resultMap>
+
+	<select id="selectByAtopId" parameterType="int" resultMap="AsubProductJoin">
+		select * from a_subcategory where a_topcategory_id=#{a_topcategory_id} order by rank asc
+	</select>
+	
+	<select id="selectAll">
+		select * from a_subcategory by rank asc
+	</select>
+	
+	<resultMap type="Asubcategory" id="AsubAtopJoin">
+		<id column="a_subcategory_id" property="a_subcategory_id"/>
+		<result column="a_topcategory_id" property="a_topcategory_id"/>
+		<result column="name" property="name"/>
+		<result column="rank" property="rank"/>
+		<association 
+		column="a_topcategory_id"
+		property="atopcategory"
+		javaType="Atopcategory"
+		select="Atopcategory.selectById"
+		/>
+	</resultMap>
+	
+	
+	<select id="selectById" parameterType="int" resultMap="AsubAtopJoin" >
+		select * from a_subcategory where a_subcategory_id = #{a_subcategory_id}
+	</select>
+	
+	<insert id="insertMaxRank" parameterType="Asubcategory">
+		<selectKey keyProperty="rank" resultType="int" order="BEFORE">
+			select max(rank)+1 from a_subcategory where a_topcategory_id=#{a_topcategory_id}
+		</selectKey>
+		insert into a_subcategory(a_topcategory_id, rank, name) values(#{a_topcategory_id}, #{rank}, #{name})
+	</insert>
+	
+
+</mapper>
